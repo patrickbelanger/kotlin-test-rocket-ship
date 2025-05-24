@@ -1,0 +1,41 @@
+// Copyright (C) 2025 Patrick Bélanger
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+package io.github.patrickbelanger.kotlin.test.rocket.ship.core.configurations
+
+import io.github.patrickbelanger.kotlin.test.rocket.ship.core.types.SupportedBrowser
+import io.github.patrickbelanger.kotlin.test.rocket.ship.core.types.SupportedDevice
+import org.openqa.selenium.PageLoadStrategy
+import org.openqa.selenium.internal.Either
+import org.springframework.boot.context.properties.ConfigurationProperties
+
+@ConfigurationProperties(prefix = "selenium")
+class SeleniumConfiguration {
+    lateinit var grid: GridConfiguration
+    lateinit var webdriver: Either<SupportedBrowser, SupportedDevice>
+    lateinit var browserOptions: SeleniumBrowserOptionsConfiguration
+
+    class GridConfiguration {
+        var enabled: Boolean = false
+        var host: String = "http://localhost:4441"
+    }
+
+    class SeleniumBrowserOptionsConfiguration {
+        var acceptInsecureCerts: Boolean = false
+        var credentialsEnableService: Boolean = false
+        var pageLoadStrategy: PageLoadStrategy = PageLoadStrategy.NORMAL
+        var passwordManagerLeakDetection: Boolean = false
+        var startMaximized: Boolean = true
+    }
+}
