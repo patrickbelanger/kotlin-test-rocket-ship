@@ -22,6 +22,7 @@ import org.springframework.stereotype.Component
 class FirefoxBrowserOptions(config: SeleniumConfiguration) : BrowserBaseOptions(config) {
     fun create(): FirefoxOptions {
         val options = FirefoxOptions()
+        configurePageLoadStrategy(options)
         return options
     }
 }

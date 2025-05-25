@@ -15,14 +15,24 @@
 package io.github.patrickbelanger.kotlin.test.rocket.ship.core.webdrivers.browsers.options
 
 import io.github.patrickbelanger.kotlin.test.rocket.ship.core.configurations.SeleniumConfiguration
-import org.openqa.selenium.remote.AbstractDriverOptions
+import org.openqa.selenium.chromium.ChromiumOptions
 
-abstract class BrowserBaseOptions(protected val config: SeleniumConfiguration) {
-    protected fun configureAcceptInsecuredCerts(options: AbstractDriverOptions<*>) {
-        options.setAcceptInsecureCerts(config.browserOptions.acceptInsecureCerts)
+abstract class ChromiumBasedBrowserOptions(config: SeleniumConfiguration) : BrowserBaseOptions(config) {
+    fun configureDisableExtensions(options: ChromiumOptions<*>) {
+        if (config.browserOptions.disableExtensions) {
+            options.addArguments("--disable-extensions")
+        }
     }
 
-    fun configurePageLoadStrategy(options: AbstractDriverOptions<*>) {
-        options.setPageLoadStrategy(config.browserOptions.pageLoadStrategy)
+    fun configureDisablePopupBlocking(options: ChromiumOptions<*>) {
+        if (config.browserOptions.disablePopupBlocking) {
+            options.addArguments("--disable-popup-blocking")
+        }
+    }
+
+    fun configureStartMaximized(options: ChromiumOptions<*>) {
+        if (config.browserOptions.startMaximized) {
+            options.addArguments("--start-maximized")
+        }
     }
 }

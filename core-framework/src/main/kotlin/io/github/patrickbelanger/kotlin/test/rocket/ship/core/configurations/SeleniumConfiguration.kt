@@ -17,13 +17,12 @@ package io.github.patrickbelanger.kotlin.test.rocket.ship.core.configurations
 import io.github.patrickbelanger.kotlin.test.rocket.ship.core.types.SupportedBrowser
 import io.github.patrickbelanger.kotlin.test.rocket.ship.core.types.SupportedDevice
 import org.openqa.selenium.PageLoadStrategy
-import org.openqa.selenium.internal.Either
 import org.springframework.boot.context.properties.ConfigurationProperties
 
 @ConfigurationProperties(prefix = "selenium")
 class SeleniumConfiguration {
     lateinit var grid: GridConfiguration
-    lateinit var webdriver: Either<SupportedBrowser, SupportedDevice>
+    lateinit var webdriver: SupportedTarget
     lateinit var browserOptions: SeleniumBrowserOptionsConfiguration
 
     class GridConfiguration {
@@ -34,8 +33,15 @@ class SeleniumConfiguration {
     class SeleniumBrowserOptionsConfiguration {
         var acceptInsecureCerts: Boolean = false
         var credentialsEnableService: Boolean = false
+        var disablePopupBlocking: Boolean = false
+        var disableExtensions: Boolean = false
         var pageLoadStrategy: PageLoadStrategy = PageLoadStrategy.NORMAL
         var passwordManagerLeakDetection: Boolean = false
         var startMaximized: Boolean = true
+    }
+
+    sealed class SupportedTarget {
+        data class Browser(val browser: SupportedBrowser) : SupportedTarget()
+        data class Device(val device: SupportedDevice) : SupportedTarget()
     }
 }

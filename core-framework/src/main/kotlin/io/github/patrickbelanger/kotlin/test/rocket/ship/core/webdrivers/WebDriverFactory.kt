@@ -20,8 +20,6 @@ import io.github.patrickbelanger.kotlin.test.rocket.ship.core.types.SupportedDev
 import io.github.patrickbelanger.kotlin.test.rocket.ship.core.webdrivers.browsers.options.ChromeBrowserOptions
 import io.github.patrickbelanger.kotlin.test.rocket.ship.core.webdrivers.browsers.options.EdgeBrowserOptions
 import io.github.patrickbelanger.kotlin.test.rocket.ship.core.webdrivers.browsers.options.FirefoxBrowserOptions
-import io.github.patrickbelanger.kotlin.test.rocket.ship.extensions.kotlin.supportedBrowser
-import io.github.patrickbelanger.kotlin.test.rocket.ship.extensions.kotlin.supportedDevice
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.edge.EdgeDriver
@@ -45,13 +43,12 @@ class WebDriverFactory(
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
     fun webDriver(): WebDriver {
-        val target = seleniumConfiguration.webdriver.supportedBrowser ?: seleniumConfiguration.webdriver.supportedDevice
+        val target = seleniumConfiguration.webdriver
         logger.info("✨ Instantiate WebDriver for $target")
 
         return when (target) {
-            is SupportedBrowser -> createSeleniumWebDriver(target)
-            is SupportedDevice -> createAppiumWebDriver(target)
-            else -> error("Unsupported browser/device")
+            is SeleniumConfiguration.SupportedTarget.Browser -> createSeleniumWebDriver(target.browser)
+            is SeleniumConfiguration.SupportedTarget.Device -> createAppiumWebDriver(target.device)
         }
     }
 

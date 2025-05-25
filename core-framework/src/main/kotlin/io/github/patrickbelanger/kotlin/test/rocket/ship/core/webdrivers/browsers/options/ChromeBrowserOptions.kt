@@ -19,10 +19,12 @@ import org.openqa.selenium.chrome.ChromeOptions
 import org.springframework.stereotype.Component
 
 @Component
-class ChromeBrowserOptions(config: SeleniumConfiguration) : BrowserBaseOptions(config) {
+class ChromeBrowserOptions(config: SeleniumConfiguration) : ChromiumBasedBrowserOptions(config) {
     fun create(): ChromeOptions {
         val options = ChromeOptions()
         configureAcceptInsecuredCerts(options)
+        configureDisableExtensions(options)
+        configureDisablePopupBlocking(options)
         configureExperimentalPreferences(options)
         configurePageLoadStrategy(options)
         configureStartMaximized(options)
@@ -30,19 +32,12 @@ class ChromeBrowserOptions(config: SeleniumConfiguration) : BrowserBaseOptions(c
         return options
     }
 
-    fun configureExperimentalPreferences(options: ChromeOptions) {
+    fun configureExperimentalPreferences(options: ChromeOptions): Map<String, Boolean> {
         val prefs = mapOf(
             "credentials_enable_service" to config.browserOptions.credentialsEnableService,
             "profile.password_manager_enabled" to config.browserOptions.passwordManagerLeakDetection
         )
         options.setExperimentalOption("prefs", prefs)
-    }
-
-    fun configurePageLoadStrategy(options: ChromeOptions) {
-        options.setPageLoadStrategy(config.browserOptions.pageLoadStrategy)
-    }
-
-    fun configureStartMaximized(options: ChromeOptions) {
-        options.addArguments("--start-maximized")
+        return prefs
     }
 }

@@ -19,9 +19,15 @@ import org.openqa.selenium.edge.EdgeOptions
 import org.springframework.stereotype.Component
 
 @Component
-class EdgeBrowserOptions(config: SeleniumConfiguration) : BrowserBaseOptions(config) {
+class EdgeBrowserOptions(config: SeleniumConfiguration) : ChromiumBasedBrowserOptions(config) {
     fun create(): EdgeOptions {
         val options = EdgeOptions()
+        configureAcceptInsecuredCerts(options)
+        configureDisableExtensions(options)
+        configureDisablePopupBlocking(options)
+        configurePageLoadStrategy(options)
+        configureStartMaximized(options)
+
         return options
     }
 }
