@@ -24,6 +24,7 @@ import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.edge.EdgeDriver
 import org.openqa.selenium.firefox.FirefoxDriver
+import org.openqa.selenium.remote.RemoteWebDriver
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
@@ -59,7 +60,20 @@ class WebDriverFactory(
     private fun createSeleniumWebDriver(browser: SupportedBrowser): WebDriver {
         logger.info("🖥️ Starting desktop browser: $browser")
         return if (seleniumConfiguration.grid.enabled) {
-            TODO()
+            val options = when(browser) {
+                SupportedBrowser.CHROME -> chromeBrowserOptions.create()
+                SupportedBrowser.EDGE -> edgeBrowserOptions.create()
+                SupportedBrowser.FIREFOX -> firefoxBrowserOptions.create()
+            }
+            logger.info("ℹ️ Using remote WebDriver at ${seleniumConfiguration.grid.host}")
+            val webdriver = RemoteWebDriver.builder()
+                .addAlternative(options)
+                .address(seleniumConfiguration.grid.host)
+                .build()
+            if (webdriver is FirefoxDriver) {
+                webdriver.manage().window().maximize()
+            }
+            webdriver
         } else {
             when (browser) {
                 SupportedBrowser.CHROME -> ChromeDriver(chromeBrowserOptions.create())
