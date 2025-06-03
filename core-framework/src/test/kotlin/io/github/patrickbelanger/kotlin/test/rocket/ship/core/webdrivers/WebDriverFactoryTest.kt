@@ -104,7 +104,7 @@ class WebDriverFactoryTest {
         }
 
         /* Act */
-        webDriver = webDriverFactory.webDriver()
+        webDriver = webDriverFactory.get()
 
         /* Assert */
         assertNotNull(webDriver)
