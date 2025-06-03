@@ -14,6 +14,7 @@
 
 package io.github.patrickbelanger.kotlin.test.rocket.ship.core
 
+import io.github.patrickbelanger.kotlin.test.rocket.ship.core.interactions.InteractionAgainst
 import io.github.patrickbelanger.kotlin.test.rocket.ship.core.webdrivers.WebDriverContext
 import io.github.patrickbelanger.kotlin.test.rocket.ship.extensions.junit.SeleniumJunitExtension
 import org.junit.jupiter.api.*
@@ -22,6 +23,7 @@ import org.junit.jupiter.api.parallel.Execution
 import org.junit.jupiter.api.parallel.ExecutionMode
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @Execution(ExecutionMode.CONCURRENT)
@@ -29,10 +31,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
     SpringExtension::class,
     SeleniumJunitExtension::class
 )
+@SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
-abstract class FrameworkBaseTest {
-    private val logger: Logger = LoggerFactory.getLogger(FrameworkBaseTest::class.java)
+abstract class FrameworkBase : InteractionAgainst() {
+    private val logger: Logger = LoggerFactory.getLogger(FrameworkBase::class.java)
 
     @BeforeEach
     fun setUp(testInfo: TestInfo) {

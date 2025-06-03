@@ -35,12 +35,12 @@ abstract class SeleniumWrapper {
         stepDescription: String,
         logger: Logger,
         block: () -> T
-    ): T? {
+    ): Pair<Boolean, T?> {
         return runCatching { block() }
             .onSuccess {
                 logger.info("✅ [PASSED] - $stepDescription")
             }.onFailure { error ->
                 logger.error("❌ [FAILED] - $stepDescription - Error: ${error.message}", error)
-            }.getOrNull()
+            }.let { it.isSuccess to it.getOrNull() }
     }
 }

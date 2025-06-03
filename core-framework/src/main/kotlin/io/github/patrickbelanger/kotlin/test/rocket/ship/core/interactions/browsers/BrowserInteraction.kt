@@ -12,25 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package io.github.patrickbelanger.kotlin.test.rocket.ship.core.interactions.elements
+package io.github.patrickbelanger.kotlin.test.rocket.ship.core.interactions.browsers
 
-import io.github.patrickbelanger.kotlin.test.rocket.ship.core.interactions.ElementWrapper
-import org.openqa.selenium.By
+import io.github.patrickbelanger.kotlin.test.rocket.ship.core.interactions.SeleniumWrapper
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class ButtonInteraction(by: By) : ElementWrapper(by) {
-    private val logger: Logger = LoggerFactory.getLogger(ButtonInteraction::class.java)
+class BrowserInteraction : SeleniumWrapper() {
+    private val logger: Logger = LoggerFactory.getLogger(BrowserInteraction::class.java)
 
-    fun isEnabled(): Boolean {
-        return runStep("Is button enabled? - Locator: $by ", logger) {
-            element.isEnabled
-        }.first
-    }
-
-    fun click(): Boolean {
-        return runStep("Click on button - Locator: $by", logger) {
-            element.click()
+    fun goTo(url: String): Boolean {
+        return runStep("Navigate to - URL: $url", logger) {
+            webDriver.get(url)
         }.first
     }
 }

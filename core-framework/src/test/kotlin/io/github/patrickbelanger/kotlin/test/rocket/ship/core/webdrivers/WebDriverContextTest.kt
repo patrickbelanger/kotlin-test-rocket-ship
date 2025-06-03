@@ -51,7 +51,6 @@ class WebDriverContextTest {
     fun `should remove WebDriver and call quit`() {
         /* Act */
         WebDriverContext.set(webDriver)
-
         WebDriverContext.remove()
 
         /* Assert */

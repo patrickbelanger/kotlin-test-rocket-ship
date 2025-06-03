@@ -14,9 +14,11 @@
 
 package io.github.patrickbelanger.kotlin.test.rocket.ship.core.interactions
 
+import io.github.patrickbelanger.kotlin.test.rocket.ship.core.interactions.browsers.BrowserInteraction
 import io.github.patrickbelanger.kotlin.test.rocket.ship.core.interactions.elements.ButtonInteraction
 import org.openqa.selenium.By
 
 abstract class InteractionAgainst : SeleniumWrapper() {
+    fun browser() = BrowserInteraction()
     fun button(by: By) = ButtonInteraction(by)
 }

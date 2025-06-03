@@ -14,19 +14,33 @@
 
 package io.github.patrickbelanger.kotlin.test.rocket.ship.extensions.junit
 
+import io.github.patrickbelanger.kotlin.test.rocket.ship.core.webdrivers.WebDriverContext
+import io.github.patrickbelanger.kotlin.test.rocket.ship.core.webdrivers.WebDriverFactory
 import org.junit.jupiter.api.extension.AfterEachCallback
 import org.junit.jupiter.api.extension.BeforeEachCallback
 import org.junit.jupiter.api.extension.ExtensionContext
 import org.slf4j.LoggerFactory
+import org.springframework.test.context.junit.jupiter.SpringExtension
 
 class SeleniumJunitExtension : AfterEachCallback, BeforeEachCallback {
     private val logger = LoggerFactory.getLogger(SeleniumJunitExtension::class.java)
 
-    override fun afterEach(context: ExtensionContext) {
+    override fun beforeEach(context: ExtensionContext) {
         logger.info("🚀 Prepare to launch test: ${context.displayName}")
+        val applicationContext = SpringExtension.getApplicationContext(context)
+        val webDriverFactory = applicationContext.getBean(WebDriverFactory::class.java)
+
+        if (!WebDriverContext.isInitialized()) {
+            val driver = webDriverFactory.get()
+            WebDriverContext.set(driver)
+        }
     }
 
-    override fun beforeEach(context: ExtensionContext) {
+    override fun afterEach(context: ExtensionContext) {
         logger.info("🧹 Cleaning up test: ${context.displayName}")
+        if (WebDriverContext.isInitialized()) {
+            WebDriverContext.get().quit()
+            WebDriverContext.remove()
+        }
     }
 }

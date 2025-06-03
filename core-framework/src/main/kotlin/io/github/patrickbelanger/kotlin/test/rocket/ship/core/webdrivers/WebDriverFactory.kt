@@ -43,7 +43,7 @@ class WebDriverFactory(
 
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    fun webDriver(): WebDriver {
+    fun get(): WebDriver {
         val target = seleniumConfiguration.webdriver
         logger.info("✨ Instantiate WebDriver for $target")
 

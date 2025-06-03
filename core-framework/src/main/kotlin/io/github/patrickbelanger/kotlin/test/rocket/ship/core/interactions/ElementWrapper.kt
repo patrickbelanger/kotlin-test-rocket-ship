@@ -17,10 +17,8 @@ package io.github.patrickbelanger.kotlin.test.rocket.ship.core.interactions
 import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.ui.ExpectedConditions
-import org.openqa.selenium.support.ui.WebDriverWait
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.time.Duration
 
 abstract class ElementWrapper(
     protected val by: By,
@@ -33,19 +31,19 @@ abstract class ElementWrapper(
     protected fun ariaRole(role: String): String? {
         return runStep("Get aria role from element - Locator: $by", logger) {
             element.ariaRole
-        }
+        }.second
     }
 
     protected fun attribute(name: String): String? {
         return runStep("Get attributes from element - Locator: $by", logger) {
             element.getAttribute(name)
-        }
+        }.second
     }
 
     protected fun cssValue(propertyName: String): String? {
         return runStep("Get css value from element - Locator: $by", logger) {
             element.getCssValue(propertyName)
-        }
+        }.second
     }
 
     protected val element: WebElement
@@ -65,12 +63,14 @@ abstract class ElementWrapper(
         wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(by))
 
     protected fun isDisplayed(): Boolean {
-        return findElement().isDisplayed
+        return runStep("Check if element is displayed - Locator: $by", logger) {
+            element.isDisplayed
+        }.first
     }
 
     protected fun text(): String? {
         return runStep("Get text from element - Locator: $by", logger) {
             element.text
-        }
+        }.second
     }
 }
