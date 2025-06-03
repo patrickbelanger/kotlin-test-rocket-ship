@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory
 import java.time.Duration
 
 abstract class ElementWrapper(
-    protected val by: By = By.id(""),
+    protected val by: By,
     protected val nameOrId: String? = null,
     protected val index: Int? = null,
     protected val webElement: WebElement? = null
@@ -33,19 +33,19 @@ abstract class ElementWrapper(
     protected fun ariaRole(role: String): String? {
         return runStep("Get aria role from element - Locator: $by", logger) {
             element.ariaRole
-        }!!
+        }
     }
 
     protected fun attribute(name: String): String? {
         return runStep("Get attributes from element - Locator: $by", logger) {
             element.getAttribute(name)
-        }!!
+        }
     }
 
     protected fun cssValue(propertyName: String): String? {
         return runStep("Get css value from element - Locator: $by", logger) {
             element.getCssValue(propertyName)
-        }!!
+        }
     }
 
     protected val element: WebElement
@@ -59,12 +59,10 @@ abstract class ElementWrapper(
         }
 
     protected fun findElement(): WebElement =
-        WebDriverWait(webDriver, Duration.ofSeconds(10))
-            .until(ExpectedConditions.presenceOfElementLocated(by))
+        wait.until(ExpectedConditions.presenceOfElementLocated(by))
 
     protected fun findElements(): List<WebElement> =
-        WebDriverWait(webDriver, Duration.ofSeconds(10))
-            .until(ExpectedConditions.presenceOfAllElementsLocatedBy(by))
+        wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(by))
 
     protected fun isDisplayed(): Boolean {
         return findElement().isDisplayed
@@ -73,6 +71,6 @@ abstract class ElementWrapper(
     protected fun text(): String? {
         return runStep("Get text from element - Locator: $by", logger) {
             element.text
-        }!!
+        }
     }
 }

@@ -24,8 +24,8 @@ class ButtonInteraction(by: By) : ElementWrapper(by) {
 
     fun isEnabled(): Boolean {
         return runStep("Is button enabled? - Locator: $by ", logger) {
-            findElement().isEnabled
-        }!!
+            element.isEnabled
+        } ?: false
     }
 
     fun click() {

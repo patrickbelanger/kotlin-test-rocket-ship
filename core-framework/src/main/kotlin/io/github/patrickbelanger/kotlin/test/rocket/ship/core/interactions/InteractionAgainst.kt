@@ -14,6 +14,9 @@
 
 package io.github.patrickbelanger.kotlin.test.rocket.ship.core.interactions
 
-abstract class InteractionAgainst : SeleniumWrapper() {
+import io.github.patrickbelanger.kotlin.test.rocket.ship.core.interactions.elements.ButtonInteraction
+import org.openqa.selenium.By
 
+abstract class InteractionAgainst : SeleniumWrapper() {
+    fun button(by: By) = ButtonInteraction(by)
 }
